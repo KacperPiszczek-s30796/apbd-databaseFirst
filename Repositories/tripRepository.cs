@@ -27,4 +27,23 @@ public class tripRepository: ItripRepository
 
         return (trips, totalCount);
     }
+    public async Task<bool> does_trip_exist(int id, CancellationToken cancellationToken)
+    {
+        return await context.Trips
+            .AnyAsync(c => c.IdTrip == id, cancellationToken);
+    }
+    public async Task<bool> is_trip_realized(int id, CancellationToken cancellationToken)
+    {
+        var trip = await context.Trips
+            .Where(t => t.IdTrip == id)
+            .Select(t => t.DateFrom)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (trip == default)
+        {
+            return true;
+        }
+
+        return trip <= DateTime.Now;
+    }
 }
