@@ -2,11 +2,11 @@
 
 public class tripDTO
 {
-    private string Name{ get; set; }
-    private string Description{ get; set; }
-    private DateTime DateFrom{ get; set; }
-    private DateTime DateTo{ get; set; }
-    private int MaxPeople{ get; set; }
-    private List<CountryDTO> Countries { get; set; }
-    private List<ClientDTO> Clients{ get; set; }
+    public string Name{ get; set; }
+    public string Description{ get; set; }
+    public DateTime DateFrom{ get; set; }
+    public DateTime DateTo{ get; set; }
+    public int MaxPeople{ get; set; }
+    public List<CountryDTO> Countries { get; set; }
+    public List<ClientDTO> Clients{ get; set; }
 }

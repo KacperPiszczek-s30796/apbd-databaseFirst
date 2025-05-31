@@ -19,7 +19,7 @@
 
     <ItemGroup>
       <Folder Include="errors\" />
-      <Folder Include="Services\abstractions\" />
+      <Folder Include="mappers\" />
     </ItemGroup>
 
 </Project>

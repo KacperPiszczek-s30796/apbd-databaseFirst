@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DatabaseFirstAproach.Services.abstractions;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DatabaseFirstAproach.Controllers;
 
@@ -6,5 +7,11 @@ namespace DatabaseFirstAproach.Controllers;
 [Route("[controller]")]
 public class Controller: ControllerBase
 {
+    private IService service;
+
+    public Controller(IService service)
+    {
+        this.service = service;
+    }
     
 }
