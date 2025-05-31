@@ -1,12 +1,13 @@
 ﻿using DatabaseFirstAproach.contracts.request;
 using DatabaseFirstAproach.contracts.response;
+using DatabaseFirstAproach.errors;
 using DatabaseFirstAproach.Models;
 using DatabaseFirstAproach.Repositories.abstractions;
 using DatabaseFirstAproach.Services.abstractions;
 
 namespace DatabaseFirstAproach.Services;
 
-public class Service: IService
+public class Service: IService 
 {
     private IClientRepository clientRepository;
     private ICountryRepository countryRepository;
@@ -67,12 +68,12 @@ public class Service: IService
     {
         var check1 = await clientRepository.does_client_exist(clientRequestDto.Pesel, cancellationToken);
         var check2 = await clientRepository.is_client_registered(clientRequestDto.Pesel, cancellationToken);
-        var check3 = await tripRepository.does_trip_exist(idTrip, cancellationToken);
+        var check3 = !(await tripRepository.does_trip_exist(idTrip, cancellationToken));
         var check4 = !(await tripRepository.is_trip_realized(idTrip, cancellationToken));
-        if (check1 || check2 || check3 || check4)
-        {
-            return false;
-        }
+        if (check1)throw new ClientAlreadyExistsException();
+        if (check2)throw new ClientAssignedToTripException();
+        if (check3)throw new TripDoesntExistException();
+        if (check4)throw new TripAlreadyDoneException();
         Client client = new Client()
         {
             FirstName = clientRequestDto.FirstName,
@@ -98,10 +99,7 @@ public class Service: IService
 
     public async Task<bool> delete_client(int id, CancellationToken cancellationToken)
     {
-        if (await clientRepository.is_client_registered(id, cancellationToken))
-        {
-            return false;
-        }
+        if (await clientRepository.is_client_registered(id, cancellationToken))throw new ClientAssignedToTripException();
         return await clientRepository.delete_client(id, cancellationToken);
     }
 }

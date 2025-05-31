@@ -18,7 +18,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="errors\" />
       <Folder Include="mappers\" />
     </ItemGroup>
 

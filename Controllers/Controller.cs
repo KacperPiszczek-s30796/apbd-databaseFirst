@@ -1,5 +1,6 @@
 ﻿using DatabaseFirstAproach.contracts.request;
 using DatabaseFirstAproach.contracts.response;
+using DatabaseFirstAproach.errors;
 using DatabaseFirstAproach.Services.abstractions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
@@ -25,22 +26,41 @@ public class Controller: ControllerBase
     [HttpPost("/trips/{idTrip}/clients")]
     public async Task<IActionResult> GetTrip([FromBody] clientRequestDTO clientRequestDto, int idTrip, CancellationToken token = default)
     {
-        var result = await service.Assign_client_to_trip(clientRequestDto, idTrip, token);
-        if (!result)
+        try
         {
-            return BadRequest();
+            var result = await service.Assign_client_to_trip(clientRequestDto, idTrip, token);
+            return Ok(result);
         }
-        return Ok(result);
+        catch (ClientAlreadyExistsException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (ClientAssignedToTripException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (TripAlreadyDoneException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (TripDoesntExistException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpDelete("/clients/{idClient}")]
     public async Task<IActionResult> DeleteClient([FromRoute] int idClient, CancellationToken token = default)
     {
-        var result = await service.delete_client(idClient, token);
-        if (!result)
+        try
         {
-            return BadRequest();
+            var result = await service.delete_client(idClient, token);
+            return Ok(result);
         }
-        return Ok(result);
+        catch (ClientAssignedToTripException e)
+        {
+            return BadRequest(e.Message);
+        }
+        
     }
 }
