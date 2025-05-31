@@ -1,4 +1,5 @@
-﻿using DatabaseFirstAproach.contracts.response;
+﻿using DatabaseFirstAproach.contracts.request;
+using DatabaseFirstAproach.contracts.response;
 using DatabaseFirstAproach.Services.abstractions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,12 @@ public class Controller: ControllerBase
     public async Task<IActionResult> GetTrips([FromQuery] int page = 1, [FromQuery] int pageSize = 10, CancellationToken token = default)
     {
         var result = await service.GetTripsAsync(page, pageSize, token);
+        return Ok(result);
+    }
+    [HttpPost("/trips/{idTrip}/clients")]
+    public async Task<IActionResult> GetTrip([FromBody] clientRequestDTO clientRequestDto, int idTrip, CancellationToken token = default)
+    {
+        var result = await service.Assign_client_to_trip(clientRequestDto, idTrip, token);
         return Ok(result);
     }
     

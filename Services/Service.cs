@@ -1,4 +1,6 @@
-﻿using DatabaseFirstAproach.contracts.response;
+﻿using DatabaseFirstAproach.contracts.request;
+using DatabaseFirstAproach.contracts.response;
+using DatabaseFirstAproach.Models;
 using DatabaseFirstAproach.Repositories.abstractions;
 using DatabaseFirstAproach.Services.abstractions;
 
@@ -59,5 +61,30 @@ public class Service: IService
             allPages = totalPages,
             trips = tripDTOs
         };
+    }
+
+    public async Task<bool> Assign_client_to_trip(clientRequestDTO clientRequestDto, int idTrip, CancellationToken cancellationToken)
+    {
+        Client client = new Client()
+        {
+            FirstName = clientRequestDto.FirstName,
+            LastName = clientRequestDto.LastName,
+            Email = clientRequestDto.Email,
+            Telephone = clientRequestDto.Telephone,
+            Pesel = clientRequestDto.Pesel
+        };
+        int id = await clientRepository.create_client(client, cancellationToken);
+        ClientTrip clientTrip = new ClientTrip()
+        {
+            IdClient = id,
+            IdTrip = clientRequestDto.IdTrip,
+            RegisteredAt = DateTime.Now,
+            PaymentDate = clientRequestDto.PaymentDate,
+        };
+        if (!(await clientRepository.CreateClientTrip(clientTrip, cancellationToken)))
+        {
+            return false;
+        }
+        return true;
     }
 }

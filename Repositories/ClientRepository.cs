@@ -41,11 +41,11 @@ public class ClientRepository: IClientRepository
         return registered;
     }
 
-    public async Task<bool> create_client(Client client, CancellationToken cancellationToken)
+    public async Task<int> create_client(Client client, CancellationToken cancellationToken)
     {
         context.Clients.Add(client);
         await context.SaveChangesAsync(cancellationToken);
-        return true;
+        return client.IdClient;
     }
 
     public async Task<bool> CreateClientTrip(ClientTrip clientTrip, CancellationToken cancellationToken)
