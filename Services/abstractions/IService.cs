@@ -8,4 +8,5 @@ public interface IService
     public Task<tripsResponseDTO> GetTripsAsync(int page, int pageSize, CancellationToken cancellationToken);
 
     public Task<bool> Assign_client_to_trip(clientRequestDTO clientRequestDto, int idTrip, CancellationToken cancellationToken);
+    public Task<bool> delete_client(int id, CancellationToken cancellationToken);
 }

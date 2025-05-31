@@ -65,6 +65,14 @@ public class Service: IService
 
     public async Task<bool> Assign_client_to_trip(clientRequestDTO clientRequestDto, int idTrip, CancellationToken cancellationToken)
     {
+        var check1 = await clientRepository.does_client_exist(clientRequestDto.Pesel, cancellationToken);
+        var check2 = await clientRepository.is_client_registered(clientRequestDto.Pesel, cancellationToken);
+        var check3 = await tripRepository.does_trip_exist(idTrip, cancellationToken);
+        var check4 = !(await tripRepository.is_trip_realized(idTrip, cancellationToken));
+        if (check1 || check2 || check3 || check4)
+        {
+            return false;
+        }
         Client client = new Client()
         {
             FirstName = clientRequestDto.FirstName,
@@ -86,5 +94,14 @@ public class Service: IService
             return false;
         }
         return true;
+    }
+
+    public async Task<bool> delete_client(int id, CancellationToken cancellationToken)
+    {
+        if (await clientRepository.is_client_registered(id, cancellationToken))
+        {
+            return false;
+        }
+        return await clientRepository.delete_client(id, cancellationToken);
     }
 }

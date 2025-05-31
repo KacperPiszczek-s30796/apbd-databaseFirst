@@ -54,4 +54,19 @@ public class ClientRepository: IClientRepository
         await context.SaveChangesAsync(cancellationToken);
         return true;
     }
+    public async Task<bool> is_client_registered(int id, CancellationToken cancellationToken)
+    {
+        bool registered = await context.ClientTrips
+            .AnyAsync(ct => ct.IdClient == id, cancellationToken);
+
+        return registered;
+    }
+
+    public async Task<bool> delete_client(int id, CancellationToken cancellationToken)
+    {
+        Client client = await context.Clients.FindAsync(id, cancellationToken);
+        context.Clients.Remove(client);
+        await context.SaveChangesAsync(cancellationToken);
+        return true;
+    }
 }

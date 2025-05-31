@@ -9,4 +9,6 @@ public interface IClientRepository
     public Task<bool> is_client_registered(string Pesel, CancellationToken cancellationToken);
     public Task<int> create_client(Client client, CancellationToken cancellationToken);
     public Task<bool> CreateClientTrip(ClientTrip clientTrip, CancellationToken cancellationToken);
+    public Task<bool> is_client_registered(int id, CancellationToken cancellationToken);
+    public Task<bool> delete_client(int id, CancellationToken cancellationToken);
 }

@@ -26,7 +26,21 @@ public class Controller: ControllerBase
     public async Task<IActionResult> GetTrip([FromBody] clientRequestDTO clientRequestDto, int idTrip, CancellationToken token = default)
     {
         var result = await service.Assign_client_to_trip(clientRequestDto, idTrip, token);
+        if (!result)
+        {
+            return BadRequest();
+        }
         return Ok(result);
     }
-    
+
+    [HttpDelete("/clients/{idClient}")]
+    public async Task<IActionResult> DeleteClient([FromRoute] int idClient, CancellationToken token = default)
+    {
+        var result = await service.delete_client(idClient, token);
+        if (!result)
+        {
+            return BadRequest();
+        }
+        return Ok(result);
+    }
 }
